@@ -1,16 +1,16 @@
 #include "BitcoinExchange.hpp"
 
+std::ifstream BitcoinExchange::input_stream;
+std::ifstream BitcoinExchange::database_stream;
+
 //-------------------------------Member functions------------------------------//
 
 void BitcoinExchange::find_btc_price(std::string infile) {
 	try {
 		check_infiles(infile);
 	}
-	catch (BitcoinExchange::DatabaseAccess & e) {
-		std::cerr << e.what() << std::endl;
-	}
-	catch (BitcoinExchange::InfileAccess & e) {
-		std::cerr << e.what() << std::endl;
+	catch (std::exception & e) {
+		throw;
 	}
 
 	std::string line;
@@ -23,23 +23,16 @@ void BitcoinExchange::find_btc_price(std::string infile) {
 	while (getline(input_stream, line)) {
 		try {
 			analyze_line(line);
-		}
-		catch (BitcoinExchange::EmptyLine & e) {
-			std::cerr << e.what() << std::endl;
-		}
-		catch (BitcoinExchange::NotPositive & e) {
-			std::cerr << e.what() << std::endl;
-		}
-		catch (BitcoinExchange::TooLarge & e) {
-			std::cerr << e.what() << std::endl;
+			// modify the line
+			std::cout << line << std::endl;
 		}
 		catch (BitcoinExchange::BadInput & e) {
 			std::cerr << e.what() << " => " << line << std::endl;
 		}
+		catch (std::exception & e) {
+			std::cerr << e.what() << std::endl;
+		}
 	}
-
-
-	//analyze data in vector and print
 }
 
 void BitcoinExchange::check_infiles(std::string infile) {

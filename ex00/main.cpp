@@ -9,10 +9,7 @@ int main (int argc, char *argv[]) {
 	try {	
 		BitcoinExchange::find_btc_price(argv[1]);
 	}
-	catch (BitcoinExchange::EmptyInfile & e) {
-		std::cerr << e.what() << std::endl;
-	}
-	catch (BitcoinExchange::EmptyDatabase & e) {
+	catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}
 
