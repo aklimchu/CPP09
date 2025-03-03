@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <limits>
 
 class BitcoinExchange {
 	public:
@@ -52,7 +53,7 @@ class BitcoinExchange {
 		class NotPositive : public std::exception {
 			public:
 				virtual const char* what() const throw() {
-					return ("Error:  not a positive number");
+					return ("Error: not a positive number");
 				}
 		};
 
@@ -71,10 +72,14 @@ class BitcoinExchange {
 		};
 
 	private:
-		static std::vector <std::string> line_divided;
 		static std::ifstream input_stream;
 		static std::ifstream database_stream;
+		static std::vector <std::string> line_divided;
+		static std::vector <std::string> date_divided;
 
 		static void check_infiles(std::string infile);
 		static void analyze_line(std::string line);
+		static std::vector<std::string> & ft_split(std::string & line, const char & sep);
+		static void check_date(std::string str);
+		static void check_amount(std::string str);
 };
