@@ -5,6 +5,8 @@ std::ifstream BitcoinExchange::database_stream;
 std::vector <std::string> BitcoinExchange::line_divided;
 std::vector <std::string> BitcoinExchange::date_divided;
 
+////////////////LEAKS!!!
+
 //-------------------------------Member functions------------------------------//
 
 void BitcoinExchange::find_btc_price(std::string infile) {
@@ -12,42 +14,29 @@ void BitcoinExchange::find_btc_price(std::string infile) {
 		check_infiles(infile);
 	}
 	catch (std::exception & e) {
-/* 		delete[] &line_divided;
-		delete[] &date_divided; */
 		throw;
 	}
 
 	std::string line;
 	if (!getline(input_stream, line)) {
 		throw EmptyInfile();
-/* 		delete[] &line_divided;
-		delete[] &date_divided; */
 	}
 
 	if (!getline(database_stream, line)) {
-/* 		delete[] &line_divided;
-		delete[] &date_divided; */
 		throw EmptyDatabase();
 	}
 	
 	while (getline(input_stream, line)) {
 		try {
 			analyze_line(line);
-
-			// modify the line
+			modify_line();
 			
-			std::cout << line << std::endl;
-/* 			delete[] &line_divided;
-			delete[] &date_divided; */
+			//std::cout << line << std::endl;
 		}
 		catch (BitcoinExchange::BadInput & e) {
-/* 			delete[] &line_divided;
-			delete[] &date_divided; */
 			std::cerr << e.what() << " => " << line << std::endl;
 		}
 		catch (std::exception & e) {
-/* 			delete[] &line_divided;
-			delete[] &date_divided; */
 			std::cerr << e.what() << std::endl;
 		}
 	}
@@ -155,4 +144,42 @@ void BitcoinExchange::check_amount(std::string str) {
 	if (amount < 0)
 		throw NotPositive();
 
+}
+
+void BitcoinExchange::modify_line(void) {
+	std::string database_line;
+	bool line_found = false;
+	double price = 0;
+	double amount = 0;
+
+	database_stream.clear();
+	database_stream.seekg(0, std::ios::beg);
+
+	while (getline(database_stream, database_line)) {
+		if ((line_divided[0].substr(0, 10) == database_line.substr(0, 10))) {
+			std::cout << line_divided[0] << "=>" << line_divided[1] << " = ";
+			line_found = true;
+			break;
+		}
+	}
+
+	if (!line_found)
+		//database_line = find_previous_line();
+	{
+		std::cout << "Line not found" << std::endl;
+		return;
+	}
+	
+
+	try {
+		std::string price_str = database_line.substr(11, database_line.size() - 11);
+		price = std::stof(price_str);
+		//delete &price_str; do we need?
+		amount = std::stof(line_divided[1]);
+	}
+	catch (...) {
+		throw;
+	}
+
+	std::cout << price * amount << std::endl;
 }

@@ -82,4 +82,5 @@ class BitcoinExchange {
 		static std::vector<std::string> & ft_split(std::string & line, const char & sep);
 		static void check_date(std::string str);
 		static void check_amount(std::string str);
+		static void modify_line(void);
 };
