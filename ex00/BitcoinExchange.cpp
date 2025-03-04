@@ -5,8 +5,6 @@ std::ifstream BitcoinExchange::database_stream;
 std::vector <std::string> BitcoinExchange::line_divided;
 std::vector <std::string> BitcoinExchange::date_divided;
 
-////////////////LEAKS!!!
-
 //-------------------------------Member functions------------------------------//
 
 void BitcoinExchange::find_btc_price(std::string infile) {
@@ -30,8 +28,6 @@ void BitcoinExchange::find_btc_price(std::string infile) {
 		try {
 			analyze_line(line);
 			modify_line();
-			
-			//std::cout << line << std::endl;
 		}
 		catch (BitcoinExchange::BadInput & e) {
 			std::cerr << e.what() << " => " << line << std::endl;
@@ -68,18 +64,18 @@ void BitcoinExchange::analyze_line(std::string line) {
 	}
 }
 
-std::vector<std::string> & BitcoinExchange::ft_split(std::string & line, const char & sep)
+std::vector<std::string> BitcoinExchange::ft_split(std::string & line, const char & sep)
 {
-    std::vector<std::string> *v = new std::vector<std::string>;
+    std::vector<std::string> v;
     size_t start;
     size_t end = 0;
 
     while ((start = line.find_first_not_of(sep, end)) != std::string::npos)
     {
         end = line.find(sep, start);
-        v->push_back(line.substr(start, end - start));
+        v.push_back(line.substr(start, end - start));
     }
-    return *v;
+    return v;
 }
 
 void BitcoinExchange::check_date(std::string str) {
@@ -163,15 +159,11 @@ void BitcoinExchange::modify_line(void) {
 		}
 	}
 
-	if (!line_found)
-		//database_line = find_previous_line();
-	{
-		std::cout << "Line not found" << std::endl;
-		return;
-	}
-	
-
 	try {
+		if (!line_found) {
+			database_line = find_previous_line();
+			std::cout << line_divided[0] << "=>" << line_divided[1] << " = ";
+		}
 		std::string price_str = database_line.substr(11, database_line.size() - 11);
 		price = std::stof(price_str);
 		//delete &price_str; do we need?
@@ -182,4 +174,36 @@ void BitcoinExchange::modify_line(void) {
 	}
 
 	std::cout << price * amount << std::endl;
+}
+
+std::string BitcoinExchange::find_previous_line(void) {
+	std::string database_line;
+	std::string previous_database_line = "9";
+	
+	database_stream.clear();
+	database_stream.seekg(0, std::ios::beg);
+
+	while (getline(database_stream, database_line)) {
+		if (line_divided[0].compare(database_line) < 0 && \
+			line_divided[0].compare(previous_database_line) > 0) {
+			try {
+				check_date(previous_database_line.substr(0, 10) + " ");
+				return (previous_database_line);
+			}
+			catch (...) {
+				throw NoEarlierDate();
+			}
+		}
+		previous_database_line = database_line;
+	}
+	throw NoEarlierDate();
+}
+
+void BitcoinExchange::closeStreams() {
+    if (input_stream.is_open()) {
+        input_stream.close();
+    }
+    if (database_stream.is_open()) {
+        database_stream.close();
+    }
 }

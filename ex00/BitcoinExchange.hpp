@@ -14,6 +14,7 @@ class BitcoinExchange {
 		BitcoinExchange & operator=(BitcoinExchange const & rhs) = delete; // Canonical
 
 		static void find_btc_price(std::string infile);
+		static void closeStreams();
 
 		class DatabaseAccess : public std::exception {
 			public:
@@ -71,6 +72,13 @@ class BitcoinExchange {
 				}
 		};
 
+		class NoEarlierDate : public std::exception {
+			public:
+				virtual const char* what() const throw() {
+					return ("Error: no earlier date found");
+				}
+		};
+
 	private:
 		static std::ifstream input_stream;
 		static std::ifstream database_stream;
@@ -79,8 +87,9 @@ class BitcoinExchange {
 
 		static void check_infiles(std::string infile);
 		static void analyze_line(std::string line);
-		static std::vector<std::string> & ft_split(std::string & line, const char & sep);
+		static std::vector<std::string> ft_split(std::string & line, const char & sep);
 		static void check_date(std::string str);
 		static void check_amount(std::string str);
 		static void modify_line(void);
+		static std::string find_previous_line(void);
 };
