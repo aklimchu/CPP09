@@ -52,6 +52,13 @@ void PmergeMe::sort_vector(std::vector<int> & v) {
 	for (int num : v) {
 		std::cout << num << " ";
 	}
+
+	v_binary_insertion(v, larger_elements);
+
+	std::cout << std::endl << "Sorted vector: ";
+	for (int num : v) {
+		std::cout << num << " ";
+	}
 }
 
 void PmergeMe::v_sort_pairs(std::vector<int> & v) {
@@ -88,5 +95,20 @@ void PmergeMe::v_breaking_into_two(std::vector<int> & v, std::vector<int> & larg
 }
 
 void PmergeMe::v_sort_smaller(std::vector<int> & v) {
+	std::vector<int>::iterator it = v.begin() + 1;
+	std::vector<int>::iterator ite = v.end();
+	std::vector<int>::iterator ittemp = it;
 
+	while (it != ite) {
+		while (ittemp > v.begin() && *ittemp < *(ittemp - 1)) {
+			std::swap(*ittemp, *(ittemp - 1));
+			ittemp--;
+		}
+		it++;
+		ittemp = it;
+	}
+}
+
+void PmergeMe::v_binary_insertion(std::vector<int> & v, std::vector<int> & larger_elements) {
+	
 }

@@ -25,6 +25,8 @@ class PmergeMe {
 		static void v_breaking_into_two(std::vector<int> & v, \
 			std::vector<int> & larger_elements);
 		static void v_sort_smaller(std::vector<int> & v);
+		static void v_binary_insertion(std::vector<int> & v, \
+			std::vector<int> & larger_elements);
 
 	private:
 };
