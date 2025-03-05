@@ -22,6 +22,4 @@ class RPN {
 					return ("Error");
 				}
 		};
-
-	private:
 };
