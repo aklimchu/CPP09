@@ -1,12 +1,15 @@
 #include "RPN.hpp"
 
 int main (int argc, char **argv) {
-	if (argc < 2)
+		if (argc < 2)
 		return 1;
 
 	try {
-		RPN::check_input(argc, argv);
-		RPN::calculate(argc, argv);
+		std::string arg(argv[1]);
+
+		arg.clear();
+		RPN::check_input(argc, argv, &arg);
+		RPN::calculate(arg);
 	}
 	catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;

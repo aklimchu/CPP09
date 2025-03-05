@@ -12,8 +12,9 @@ class RPN {
 
 		RPN & operator=(RPN const & rhs) = delete; // Canonical
 		
-		static void check_input(int argc, char **argv);
-		static void calculate(int argc, char **argv);
+		static void check_input(int argc, char **argv, std::string *arg);
+		static void calculate(std::string arg);
+		static void	arithmetic_operation(std::stack<int> & stack, char elem);
 
 		class InputError: public std::exception {
 			public:
@@ -23,6 +24,4 @@ class RPN {
 		};
 
 	private:
-		static std::string arg;
-		static std::stack<int> result;
 };
