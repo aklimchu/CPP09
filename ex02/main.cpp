@@ -14,11 +14,11 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-		std::cout << "Original vector: ";
+		/* std::cout << "Original vector: ";
 		for (int num : v) {
 			std::cout << num << " ";
 		}
-		std::cout << std::endl;
+		std::cout << std::endl; */
 
 		PmergeMe::sort_vector(v);
 

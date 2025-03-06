@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath> // for std::pow()
 
 class PmergeMe {
 	public:
