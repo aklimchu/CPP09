@@ -2,8 +2,8 @@
 
 std::ifstream BitcoinExchange::input_stream;
 std::ifstream BitcoinExchange::database_stream;
-std::vector <std::string> BitcoinExchange::line_divided;
-std::vector <std::string> BitcoinExchange::date_divided;
+std::deque <std::string> BitcoinExchange::line_divided;
+std::deque <std::string> BitcoinExchange::date_divided;
 
 //-------------------------------Member functions------------------------------//
 
@@ -64,9 +64,9 @@ void BitcoinExchange::analyze_line(std::string line) {
 	}
 }
 
-std::vector<std::string> BitcoinExchange::ft_split(std::string & line, const char & sep)
+std::deque<std::string> BitcoinExchange::ft_split(std::string & line, const char & sep)
 {
-    std::vector<std::string> v;
+    std::deque<std::string> v;
     size_t start;
     size_t end = 0;
 

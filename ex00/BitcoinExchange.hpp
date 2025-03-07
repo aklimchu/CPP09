@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <deque>
 #include <limits>
 
 class BitcoinExchange {
@@ -82,12 +82,12 @@ class BitcoinExchange {
 	private:
 		static std::ifstream input_stream;
 		static std::ifstream database_stream;
-		static std::vector <std::string> line_divided;
-		static std::vector <std::string> date_divided;
+		static std::deque <std::string> line_divided;
+		static std::deque <std::string> date_divided;
 
 		static void check_infiles(std::string infile);
 		static void analyze_line(std::string line);
-		static std::vector<std::string> ft_split(std::string & line, const char & sep);
+		static std::deque<std::string> ft_split(std::string & line, const char & sep);
 		static void check_date(std::string str);
 		static void check_amount(std::string str);
 		static void modify_line(void);
